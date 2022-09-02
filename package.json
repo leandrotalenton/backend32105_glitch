@@ -1,0 +1,22 @@
+{
+  "name": "backend_glitch",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leandrotalenton/backend32105_glitch.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/leandrotalenton/backend32105_glitch/issues"
+  },
+  "homepage": "https://github.com/leandrotalenton/backend32105_glitch#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
