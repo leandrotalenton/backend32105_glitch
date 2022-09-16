@@ -6,7 +6,8 @@ let productos = []
 
 // devuelve todos los productos
 router.get("/", (req,res)=>{
-    res.send(productos)
+    // res.send(productos)
+    res.render(`./productos`,{productos})
 })
 
 //devuelve un producto segun su id
@@ -28,7 +29,8 @@ router.post("/", (req,res)=>{
         req.body.id = 1
     }
     productos.push(req.body)
-    res.send(req.body)
+    // res.send(req.body)
+    res.redirect(`/`)
 })
 
 //recibe y actualiza un producto segun su id

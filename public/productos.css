@@ -1,0 +1,32 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.productos{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    flex-direction: column;
+    padding: 30px;
+}
+
+.productos table {
+border-collapse: separate;
+border-spacing: 0px;
+}
+
+thead{
+    background-color: aquamarine;
+}
+
+td{
+    width: 33%;
+    border: 1px solid black;
+}
+
+.productos img {
+    height: 50px;
+    width: 50px;
+}
