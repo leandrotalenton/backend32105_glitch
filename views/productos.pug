@@ -1,0 +1,23 @@
+link(rel="stylesheet" href="/productos.css")
+
+
+
+.productos
+    if productos.length===0
+        h2 No hay informacion para mostrar
+    else
+        table
+            thead
+                tr
+                    td Title
+                    td Price
+                    td Thumbnail
+            tbody
+                each producto in productos
+                    tr
+                        td= producto.title
+                        td= producto.price
+                        td
+                            img(src=producto.thumbnail)
+    a(href="/")
+        button Ir a /

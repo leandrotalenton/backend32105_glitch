@@ -10,7 +10,7 @@ app.use(express.urlencoded({extended:true}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.set("views","./views")
-app.set("view engine","ejs")
+app.set("view engine","pug")
 
 app.use("/api/productos", productos)
 
