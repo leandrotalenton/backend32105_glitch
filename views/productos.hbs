@@ -1,0 +1,27 @@
+<link rel="stylesheet" href="/productos.css">
+
+<div class="productos">
+    {{#if productos}}
+        <table>
+            <thead>
+                <tr>
+                    <td>Title</td>
+                    <td>Price</td>
+                    <td>Thumbnail</td>
+                </tr>
+            </thead>
+            <tbody>
+            {{#each productos}}
+                <tr>
+                    <td> {{this.title}} </td>
+                    <td> {{this.price}} </td>
+                    <td> <img src= {{this.thumbnail}}></td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    {{else}}
+        <h2>No hay informacion para mostrar</h2>
+    {{/if}}
+    <a href="/"><button>Ir a /</button></a>
+</div>
