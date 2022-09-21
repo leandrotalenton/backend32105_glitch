@@ -7,7 +7,7 @@ let arrProductos = []
 // devuelve todos los productos
 router.get("/", (req,res)=>{
     // res.send(productos)
-    res.render(`./productos`,{arrProductos})
+    res.render(`./partials/productos`,{arrProductos})
 })
 
 //devuelve un producto segun su id
