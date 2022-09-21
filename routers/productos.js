@@ -2,7 +2,10 @@ const express = require('express');
 const {Router} = express;
 const router = Router()
 
-let arrProductos = []
+let arrProductos = [
+    { title: '123', price: '123', thumbnail: 'https://cdn3.iconfinder.com/data/icons/education-209/64/clock-stopwatch-timer-time-128.png', id: 1 },
+    { title: '123', price: '123', thumbnail: 'https://cdn3.iconfinder.com/data/icons/education-209/64/clock-stopwatch-timer-time-128.png', id: 2 }
+]
 
 // devuelve todos los productos
 router.get("/", (req,res)=>{

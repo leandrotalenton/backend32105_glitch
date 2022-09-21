@@ -11,7 +11,7 @@
     padding: 30px;
 }
 
-.formulario form{
+.formulario .form{
     width: 300px;
     display: flex;
     flex-direction: column;

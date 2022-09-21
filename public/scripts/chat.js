@@ -1,11 +1,10 @@
 
 function render(data) {
     const chatHTML = data.map((msg) => `
-        <li class="clearfix">
-            <div class="message-data">
-                <span class="message-data-time">${msg.autor}</span>
+        <li>
+            <div>
+                <span>${msg.autor} on [${msg.date}]: ${msg.msj}</span>
             </div>
-            <div class="message my-message">${msg.msj}</div>
         </li>
     `).join(" ");
 
@@ -14,15 +13,15 @@ function render(data) {
 
 function enviarMensaje() {
     console.log(`enviando mensaje`)
-    const nombre = document.getElementById("nombre").value;
+    const email = document.getElementById("email").value;
     const msj = document.getElementById("chat_mensaje").value;
     document.getElementById("chat_mensaje").value = "";
-    socket.emit("new_msg", { autor: nombre, msj: msj });
+    socketChat.emit("new_msg", { autor: email, msj: msj });
     return false;
 }
 
-const socket = io.connect();
+const socketChat = io.connect();
 
-socket.on("mensajes", (data) => {
+socketChat.on("mensajes", (data) => {
     render(data);
 })

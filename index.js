@@ -35,28 +35,31 @@ app.get("/", (req, res)=>{
 })
 
 // socket events
-const Mensajes = [
-    { autor: "Jose", msj: "hola mundo!" },
-    { autor: "maria", msj: "hola coder!" },
-    { autor: "pedro", msj: "hola todos!" },
-];
+const Mensajes = [];
 
 io.on('connection', (socket)=>{
     console.log(`Cliente conectado a ${socket}`)
-    socket.emit("mensajes", Mensajes);
 
+    // chat
+    socket.emit("mensajes", Mensajes);
     socket.on("new_msg", (data) => {
-        console.log(data);
+        const currDate = new Date()
+        data.date= `${currDate.toLocaleString()}`
         Mensajes.push(data);
         io.sockets.emit("mensajes", Mensajes);
     });
 
+    // prod
+    socket.emit("productos", productos.array);
+    socket.on("new_prod", (data) => {
+        data.id = productos.array[productos.array.length-1]?.id+1 // esto le pone el id desde el backend
+        productos.array.push(data);
+        io.sockets.emit("productos", productos.array);
+    });
 })
 
 
-
 // server listen
-// app.listen(8080, ()=>{
 HttpServer.listen(8080, ()=>{
     console.log(`servidor iniciado`)
 })

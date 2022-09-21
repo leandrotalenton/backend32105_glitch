@@ -1,8 +1,11 @@
 <link rel="stylesheet" href="./styles/productos.css">
+<script src="socket.io/socket.io.js"></script>
+<script src="./scripts/productos.js"></script>
 
 
 
 <div class="productos">
+    <!-- <% console.log(arrProductos) %> -->
     <% if(arrProductos.length===0){ %>
         <h2>No hay informacion para mostrar</h2>
     <% }else{ %>
@@ -14,7 +17,7 @@
                     <td>Thumbnail</td>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="productos--tbody">
             <% arrProductos.forEach(producto => { %>
                 <tr>
                     <td> <%= producto.title %> </td>
@@ -23,7 +26,7 @@
                 </tr>
             <% }) %>
         </tbody>
-    </table>    
-    <% } %>
+    </table>
+    <!-- <% } %> -->
     <!-- <a href="/"><button>Ir a /</button></a> -->
 </div>
