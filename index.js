@@ -52,7 +52,8 @@ io.on('connection', (socket)=>{
     // prod
     socket.emit("productos", productos.array);
     socket.on("new_prod", (data) => {
-        data.id = productos.array[productos.array.length-1]?.id+1 // esto le pone el id desde el backend
+        data.id = (productos.array.length === 0)
+        ? 1 : productos.array[productos.array.length-1]?.id+1 // esto le pone el id desde el backend
         productos.array.push(data);
         io.sockets.emit("productos", productos.array);
     });

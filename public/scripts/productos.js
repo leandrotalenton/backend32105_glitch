@@ -1,10 +1,3 @@
-const socketProd = io.connect();
-
-socketProd.on("productos", (data) => {
-    console.log(`se recibio el evento productos y esta es la data:`,data)
-    renderProductos(data);
-})
-
 function renderProductos(data) {
     const productosHTML = data.map((producto) => `
         <tr>
@@ -28,7 +21,14 @@ function enviarProducto() {
         title: title,
         price: price,
         thumbnail:thumbnail,
-        // id: arrProductos[arrProductos.length-1]?.id+1
     });
     return false;
 }
+
+const socketProd = io.connect();
+
+socketProd.on("productos", (data) => {
+    console.log(`se recibio el evento productos y esta es la data:`,data)
+    renderProductos(data);
+})
+
