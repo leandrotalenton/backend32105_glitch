@@ -14,8 +14,15 @@ app.set("view engine","ejs")
 
 app.use("/api/productos", productos.routes)
 
+// let producto={
+//     arrProductos: [ { title: '123', price: '123', thumbnail: '123', id: 1 } ]
+// }
+
+// console.log(`producto`,producto)
+// console.log(`{arrProductos:productos.array}`,{arrProductos:productos.array})
+
 app.get("/", (req, res)=>{
-    res.render(`./formulario`)
+    res.render(`./formulario`, {arrProductos:productos.array})
 })
 
 app.listen(8080, ()=>{
