@@ -12,7 +12,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set("views","./views")
 app.set("view engine","ejs")
 
-app.use("/api/productos", productos)
+app.use("/api/productos", productos.routes)
 
 app.get("/", (req, res)=>{
     res.render(`./formulario`)
