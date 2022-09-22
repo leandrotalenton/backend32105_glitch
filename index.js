@@ -11,6 +11,14 @@ const { Server: SocketServer } = require("socket.io")
 const HttpServer = new HTTPServer(app)
 const io = new SocketServer(HttpServer)
 
+// fileSystem
+const fs = require("fs");
+
+
+
+//
+
+
 // static files
 const path = require('path');
 app.use(express.static(path.join(__dirname, 'public')));
@@ -23,30 +31,31 @@ app.set("view engine","ejs")
 const productos = require("./routers/productos")
 app.use("/api/productos", productos.routes)
 
-// let producto={
-//     arrProductos: [ { title: '123', price: '123', thumbnail: '123', id: 1 } ]
-// }
-
-// console.log(`producto`,producto)
-// console.log(`{arrProductos:productos.array}`,{arrProductos:productos.array})
-
 app.get("/", (req, res)=>{
     res.render(`./index`, {arrProductos:productos.array})
 })
 
 // socket events
-const Mensajes = [];
+const Mensajes = [{"autor":"leandro","msj":"hola","date":"9/21/2022, 10:29:45 PM"}]
 
 io.on('connection', (socket)=>{
-    console.log(`Cliente conectado a ${socket}`)
+    console.log(`Cliente conectado, id: ${socket.id}`)
 
     // chat
     socket.emit("mensajes", Mensajes);
+    // (async function getAll(){
+    //     const currentMensajes = await fs.promises.readFile(`./fileStorage/mensajes.json`, "utf-8");
+    //     const mensajes = JSON.parse(currentMensajes);
+    //     Mensajes=mensajes
+    //     socket.emit("mensajes", Mensajes)
+    //     // console.log(mensajes)
+    // })()
     socket.on("new_msg", (data) => {
         const currDate = new Date()
         data.date= `${currDate.toLocaleString()}`
         Mensajes.push(data);
         io.sockets.emit("mensajes", Mensajes);
+        fs.promises.writeFile(`./fileStorage/mensajes.json`,JSON.stringify(Mensajes)) // version rancia que pisa todo
     });
 
     // prod

@@ -28,7 +28,7 @@ function enviarProducto() {
 const socketProd = io.connect();
 
 socketProd.on("productos", (data) => {
-    console.log(`se recibio el evento productos y esta es la data:`,data)
+    // console.log(`se recibio el evento productos y esta es la data:`,data)
     renderProductos(data);
 })
 
