@@ -1,9 +1,9 @@
-<link rel="stylesheet" href="/productos.css">
+<link rel="stylesheet" href="./styles/productos.css">
 
 
 
 <div class="productos">
-    <% if(productos.length===0){ %>
+    <% if(arrProductos.length===0){ %>
         <h2>No hay informacion para mostrar</h2>
     <% }else{ %>
         <table>
@@ -14,8 +14,8 @@
                     <td>Thumbnail</td>
                 </tr>
             </thead>
-            <tbody>
-            <% productos.forEach(producto => { %>
+            <tbody id="productos--tbody">
+            <% arrProductos.forEach(producto => { %>
                 <tr>
                     <td> <%= producto.title %> </td>
                     <td> <%= producto.price %> </td>
@@ -23,7 +23,7 @@
                 </tr>
             <% }) %>
         </tbody>
-    </table>    
+    </table>
     <% } %>
-    <a href="/"><button>Ir a /</button></a>
+
 </div>
