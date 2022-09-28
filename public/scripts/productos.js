@@ -17,7 +17,7 @@ function enviarProducto() {
     document.getElementById("title").value=""
     document.getElementById("price").value=""
     document.getElementById("thumbnail").value=""
-    socketProd.emit("new_prod", {
+    socket.emit("new_prod", {
         title: title,
         price: price,
         thumbnail:thumbnail,
@@ -25,9 +25,9 @@ function enviarProducto() {
     return false;
 }
 
-const socketProd = io.connect();
+const socket = io.connect();
 
-socketProd.on("productos", (data) => {
+socket.on("productos", (data) => {
     // console.log(`se recibio el evento productos y esta es la data:`,data)
     renderProductos(data);
 })
