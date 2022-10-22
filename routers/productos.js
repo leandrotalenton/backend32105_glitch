@@ -2,24 +2,29 @@ import express from 'express'
 const {Router} = express;
 const router = Router()
 
-let arrProductos = [
-    { title: '123', price: '123', thumbnail: 'https://cdn3.iconfinder.com/data/icons/education-209/64/clock-stopwatch-timer-time-128.png', id: 1 },
-    { title: '123', price: '123', thumbnail: 'https://cdn3.iconfinder.com/data/icons/education-209/64/clock-stopwatch-timer-time-128.png', id: 2 }
-]
+import { Container } from '../dbConnection/container.js';
+import mySqlConfig from '../dbConnection/mySqlConfig.js';
+const DbProductos = new Container(mySqlConfig, 'products')
+
 
 // devuelve todos los productos
-router.get("/", (req,res)=>{
-    res.render(`./partials/productos`,{arrProductos})
+router.get("/", async (req,res)=>{
+    try{
+        const arrProductos = await DbProductos.getAll()
+        res.render(`./partials/productos`,{arrProductos})
+    } catch(err) {
+        res.status(404).send(err)
+    }
 })
 
 //devuelve un producto segun su id
-router.get("/:id", (req,res)=>{
-    const { id } = req.params
-    const prodcuto = arrProductos.find( p => p.id === parseInt(id))
-    if(prodcuto){
-        res.send(prodcuto)
-    } else {
-        res.status(404).send({error:`producto no encontrado`})
+router.get("/:id", async (req,res)=>{
+    try {
+        const { id } = req.params
+        const producto = await DbProductos.getById(id)
+        res.send(producto)
+    } catch(err) {
+        res.status(404).send(err)
     }
 })
 
@@ -60,4 +65,4 @@ router.delete("/:id", (req,res)=>{
     }
 })
 
-export { router, arrProductos }
+export { router }
