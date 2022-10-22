@@ -1,4 +1,4 @@
-const express = require('express');
+import express from 'express'
 const {Router} = express;
 const router = Router()
 
@@ -9,7 +9,6 @@ let arrProductos = [
 
 // devuelve todos los productos
 router.get("/", (req,res)=>{
-    // res.send(productos)
     res.render(`./partials/productos`,{arrProductos})
 })
 
@@ -32,7 +31,6 @@ router.post("/", (req,res)=>{
         req.body.id = 1
     }
     arrProductos.push(req.body)
-    // res.send(req.body)
     res.redirect(`/`)
 })
 
@@ -62,5 +60,4 @@ router.delete("/:id", (req,res)=>{
     }
 })
 
-module.exports.routes = router
-module.exports.array = arrProductos
+export { router, arrProductos }

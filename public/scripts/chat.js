@@ -20,8 +20,6 @@ function enviarMensaje() {
     return false;
 }
 
-// const socketChat = io.connect();
-
 socket.on("mensajes", (data) => {
     renderChat(data);
 })
