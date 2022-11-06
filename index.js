@@ -12,7 +12,7 @@ const HttpServer = new HTTPServer(app)
 const io = new Server(HttpServer)
 
 // fileSystem
-import fs from "fs"
+// import fs from "fs"
 
 // DB
 import { Container } from './dbConnection/container.js';
@@ -36,23 +36,33 @@ import { router } from "./routers/productos.js"
 app.use("/api/productos", router)
 
 app.get("/", async (req, res)=>{
-    res.render(`./index`, {arrProductos: await DbProductos.getAll()}) // <-- esto me parece raro
+    res.render(`./index`, {arrProductos: await DbProductos.getAll()})
 })
 
-// socket events
-// const mensajes = [{"autor":"leandro","msj":"hola","date":"9/21/2022, 10:29:45 PM"}]
+// list of products with faker
+import { faker } from '@faker-js/faker'
+faker.locale = ('es')
 
-// async function consolelogueameesta(){
-//     const asd = await DbProductos.getAll()
-//     console.log(`hola`,asd)
-// }
-// consolelogueameesta()
+const genFakeProduct = ()=>{
+    return {
+        title: faker.commerce.productName(),
+        price: faker.commerce.price(100, 200, 2),
+        thumbnail: faker.image.food(75, 75, true)
+    }
+}
 
-// async function consolelogueameestaa(){
-//     const asd = await DbMensajes.getAll()
-//     console.log(`hola`,asd)
-// }
-// consolelogueameestaa()
+app.get("/api/productos-test", async (req,res)=>{
+    try{
+        const arrProductos = []
+        for(let i = 0 ; i < 5 ; i++){
+            arrProductos.push(genFakeProduct())
+        }
+        res.render(`./partials/productosIndependientes`,{arrProductos})
+    } catch(err) {
+        res.status(404).send(err)
+    }
+})
+// end of list of products with faker
 
 io.on('connection', async (socket)=>{
     console.log(`Cliente conectado, id: ${socket.id}`)
