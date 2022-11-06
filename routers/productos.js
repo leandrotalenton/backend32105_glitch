@@ -10,7 +10,6 @@ const DbProductos = new Container(mySqlConfig, 'products')
 // devuelve todos los productos
 router.get("/", async (req,res)=>{
     try{
-        // const arrProductos = await DbProductos.getAll()
         const arrProductos = await DbProductos.getAll()
         res.render(`./partials/productos`,{arrProductos})
     } catch(err) {

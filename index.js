@@ -64,17 +64,21 @@ app.get("/api/productos-test", async (req,res)=>{
 })
 // end of list of products with faker
 
+// DAO (unicamente memory)
+import daos from "./daos/index.js"
+const { chatsDAO } = await daos()
+
 io.on('connection', async (socket)=>{
     console.log(`Cliente conectado, id: ${socket.id}`)
 
     // chat
-    socket.emit("new_msg", await DbMensajes.getAll());
+    socket.emit("new_msg", await chatsDAO.read());
     socket.on("new_msg", async (data) => {
         try{
             const currDate = new Date()
             data.date= `${currDate.toLocaleString()}`
-            await DbMensajes.save(data)
-            const mensajes = await DbMensajes.getAll()
+            await chatsDAO.create(data)
+            const mensajes = await chatsDAO.read()
             io.sockets.emit("new_msg", mensajes);
         } catch(err) {
             console.log(err)
