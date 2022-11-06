@@ -1,5 +1,5 @@
 import { ContainerMemory } from "../../containers/ContainerMemory.js";
 
-class DAOCarritosMemory extends ContainerMemory{}
+class DAOChatsMemory extends ContainerMemory{}
 
-export default DAOCarritosMemory
+export default DAOChatsMemory

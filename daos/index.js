@@ -7,6 +7,12 @@ const daos = {
         return {
             chatsDAO: new DAOChatsMemory(),
         }
+    },
+    fs: async () => {
+        const { default: DAOChatsFs } = await import("./chats/ChatsDaoFs.js")
+        return {
+            chatsDAO: new DAOChatsFs(),
+        }
     }
 }
 
