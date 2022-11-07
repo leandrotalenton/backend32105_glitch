@@ -1,12 +1,17 @@
 const socket = io.connect();
 
+
 // chat ///////////////////////////////////////////////////////////////////
+
+// desnormalizacion de data:
+const autoresSchema = new normalizr.schema.Entity("autores");
+const chatsSchema = new normalizr.schema.Entity("chats", {mensajes:[{autor:autoresSchema}]});
 
 function renderChat(data) {
     const chatHTML = data.map((msg) => `
         <li>
             <div>
-                <span>${msg.autor} on [${msg.date}]: ${msg.msj}</span>
+                <span>${msg.autor.id} on [${msg.date}]: ${msg.msj}</span>
             </div>
         </li>
     `).join(" ");
@@ -15,15 +20,28 @@ function renderChat(data) {
 }
 
 function enviarMensaje() {
-    socket.emit("new_msg", {
-        autor: document.getElementById("email").value,
+    const data = {
+        autor: {
+            id: document.getElementById("email").value,
+            nombre: document.getElementById("nombre").value,
+            apellido: document.getElementById("apellido").value,
+            edad: document.getElementById("edad").value,
+            alias: document.getElementById("alias").value,
+            avatar: document.getElementById("avatar").value,
+        },
         msj: document.getElementById("chat_mensaje").value 
-    });
+    }
+    socket.emit("new_msg", data);
     document.getElementById("chat_mensaje").value = "";
     return false;
 }
 
-socket.on("new_msg", (data) => {
+socket.on("new_msg", (dataNormalizada) => {
+    //denormalizacion de la data
+    console.log("esto recibe el front: ",dataNormalizada)
+    const data = normalizr.denormalize(dataNormalizada.result, chatsSchema, dataNormalizada.entities).mensajes
+    console.log("esto intenta renderizar el front", normalizr.denormalize(dataNormalizada.result, chatsSchema, dataNormalizada.entities))
+    console.log("porcentaje de reduccion de datos: ", (JSON.stringify(dataNormalizada).length/JSON.stringify(normalizr.denormalize(dataNormalizada.result, chatsSchema, dataNormalizada.entities)).length)*100,"%")
     renderChat(data);
 })
 

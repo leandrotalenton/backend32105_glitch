@@ -64,22 +64,359 @@ app.get("/api/productos-test", async (req,res)=>{
 })
 // end of list of products with faker
 
-// DAO (unicamente memory)
+// DAOs
 import daos from "./daos/index.js"
 const { chatsDAO } = await daos()
+
+// normalizr
+
+const mockData = {
+    id: "mensajes",
+    chats: [
+        {
+            autor: {
+                id: "leandrotalenton@hotmail.com",
+                nombre: "leandro",
+                apellido: "talenton",
+                edad: "30",
+                alias: "leny",
+                avatar: "lenyAvatar"
+            },
+            msj: "holaa!!",
+            date: "11/6/2022, 3:22:41 PM",
+            id: 1
+        },
+        {
+            autor: {
+                id: "leandrotalenton@hotmail.com",
+                nombre: "leandro",
+                apellido: "talenton",
+                edad: "30",
+                alias: "leny",
+                avatar: "lenyAvatar"
+            },
+            msj: "asd!!",
+            date: "11/6/2022, 3:22:41 PM",
+            id: 2
+        },
+        {
+            autor: {
+                id: "leandrotalenton@hotmail.com",
+                nombre: "leandro",
+                apellido: "talenton",
+                edad: "30",
+                alias: "leny",
+                avatar: "lenyAvatar"
+            },
+            msj: "fdd!!",
+            date: "11/6/2022, 3:22:41 PM",
+            id: 3
+        },
+        {
+            autor: {
+                id: "guest@hotmail.com",
+                nombre: "guest",
+                apellido: "guest",
+                edad: "30",
+                alias: "guest",
+                avatar: "guestAvatar"
+            },
+            msj: "fdd!!",
+            date: "11/6/2022, 3:22:41 PM",
+            id: 4
+        },
+        {
+            autor: {
+                id: "leandrotalenton@hotmail.com",
+                nombre: "leandro",
+                apellido: "talenton",
+                edad: "30",
+                alias: "leny",
+                avatar: "lenyAvatar"
+            },
+            msj: "fdd!!",
+            date: "11/6/2022, 3:22:41 PM",
+            id: 5
+        },
+        {
+            autor: {
+                id: "leandrotalenton@hotmail.com",
+                nombre: "leandro",
+                apellido: "talenton",
+                edad: "30",
+                alias: "leny",
+                avatar: "lenyAvatar"
+            },
+            msj: "fdd!!",
+            date: "11/6/2022, 3:22:41 PM",
+            id: 6
+        },
+        {
+            autor: {
+                id: "leandrotalenton@hotmail.com",
+                nombre: "leandro",
+                apellido: "talenton",
+                edad: "30",
+                alias: "leny",
+                avatar: "lenyAvatar"
+            },
+            msj: "fdd!!",
+            date: "11/6/2022, 3:22:41 PM",
+            id: 7
+        },
+        {
+            autor: {
+                id: "leandrotalenton@hotmail.com",
+                nombre: "leandro",
+                apellido: "talenton",
+                edad: "30",
+                alias: "leny",
+                avatar: "lenyAvatar"
+            },
+            msj: "fdd!!",
+            date: "11/6/2022, 3:22:41 PM",
+            id: 8
+        },
+        {
+            autor: {
+                id: "leandrotalenton@hotmail.com",
+                nombre: "leandro",
+                apellido: "talenton",
+                edad: "30",
+                alias: "leny",
+                avatar: "lenyAvatar"
+            },
+            msj: "fdd!!",
+            date: "11/6/2022, 3:22:41 PM",
+            id: 9
+        },
+        {
+            autor: {
+                id: "leandrotalenton@hotmail.com",
+                nombre: "leandro",
+                apellido: "talenton",
+                edad: "30",
+                alias: "leny",
+                avatar: "lenyAvatar"
+            },
+            msj: "fdd!!",
+            date: "11/6/2022, 3:22:41 PM",
+            id: 10
+        },
+        {
+            autor: {
+                id: "leandrotalenton@hotmail.com",
+                nombre: "leandro",
+                apellido: "talenton",
+                edad: "30",
+                alias: "leny",
+                avatar: "lenyAvatar"
+            },
+            msj: "holaa!!",
+            date: "11/6/2022, 3:22:41 PM",
+            id: 11
+        },
+        {
+            autor: {
+                id: "leandrotalenton@hotmail.com",
+                nombre: "leandro",
+                apellido: "talenton",
+                edad: "30",
+                alias: "leny",
+                avatar: "lenyAvatar"
+            },
+            msj: "asd!!",
+            date: "11/6/2022, 3:22:41 PM",
+            id: 12
+        },
+        {
+            autor: {
+                id: "leandrotalenton@hotmail.com",
+                nombre: "leandro",
+                apellido: "talenton",
+                edad: "30",
+                alias: "leny",
+                avatar: "lenyAvatar"
+            },
+            msj: "fdd!!",
+            date: "11/6/2022, 3:22:41 PM",
+            id: 13
+        },
+        {
+            autor: {
+                id: "guest@hotmail.com",
+                nombre: "guest",
+                apellido: "guest",
+                edad: "30",
+                alias: "guest",
+                avatar: "guestAvatar"
+            },
+            msj: "fdd!!",
+            date: "11/6/2022, 3:22:41 PM",
+            id: 14
+        },
+        {
+            autor: {
+                id: "leandrotalenton@hotmail.com",
+                nombre: "leandro",
+                apellido: "talenton",
+                edad: "30",
+                alias: "leny",
+                avatar: "lenyAvatar"
+            },
+            msj: "fdd!!",
+            date: "11/6/2022, 3:22:41 PM",
+            id: 15
+        },
+        {
+            autor: {
+                id: "leandrotalenton@hotmail.com",
+                nombre: "leandro",
+                apellido: "talenton",
+                edad: "30",
+                alias: "leny",
+                avatar: "lenyAvatar"
+            },
+            msj: "fdd!!",
+            date: "11/6/2022, 3:22:41 PM",
+            id: 16
+        },
+        {
+            autor: {
+                id: "leandrotalenton@hotmail.com",
+                nombre: "leandro",
+                apellido: "talenton",
+                edad: "30",
+                alias: "leny",
+                avatar: "lenyAvatar"
+            },
+            msj: "fdd!!",
+            date: "11/6/2022, 3:22:41 PM",
+            id: 17
+        },
+        {
+            autor: {
+                id: "leandrotalenton@hotmail.com",
+                nombre: "leandro",
+                apellido: "talenton",
+                edad: "30",
+                alias: "leny",
+                avatar: "lenyAvatar"
+            },
+            msj: "fdd!!",
+            date: "11/6/2022, 3:22:41 PM",
+            id: 18
+        },
+        {
+            autor: {
+                id: "leandrotalenton@hotmail.com",
+                nombre: "leandro",
+                apellido: "talenton",
+                edad: "30",
+                alias: "leny",
+                avatar: "lenyAvatar"
+            },
+            msj: "fdd!!",
+            date: "11/6/2022, 3:22:41 PM",
+            id: 19
+        },
+        {
+            autor: {
+                id: "leandrotalenton@hotmail.com",
+                nombre: "leandro",
+                apellido: "talenton",
+                edad: "30",
+                alias: "leny",
+                avatar: "lenyAvatar"
+            },
+            msj: "fdd!!",
+            date: "11/6/2022, 3:22:41 PM",
+            id: 20
+        },
+    ]
+}
+
+const chatsMock = {
+    id: 'chats',
+    mensajes: [
+        {
+            autor: {
+            id: '111',
+            nombre: '111',
+            apellido: '111',
+            edad: '111',
+            alias: '111',
+            avatar: '111'
+            },
+            msj: '55',
+            date: '11/6/2022, 8:54:39 PM',
+            id: 1
+        },
+        {
+            autor: {
+            id: '111',
+            nombre: '111',
+            apellido: '111',
+            edad: '111',
+            alias: '111',
+            avatar: '111'
+            },
+            msj: '55',
+            date: '11/6/2022, 8:54:39 PM',
+            id: 2
+        },
+        {
+            autor: {
+            id: '222',
+            nombre: '111',
+            apellido: '111',
+            edad: '111',
+            alias: '111',
+            avatar: '111'
+            },
+            msj: '55',
+            date: '11/6/2022, 8:54:39 PM',
+            id: 3
+        },
+    ]
+}
+
+import util from 'util'
+import { normalize, denormalize, schema } from 'normalizr';
+const autoresSchema = new schema.Entity("autores");
+const chatsSchema = new schema.Entity("chats", {mensajes:[{autor:autoresSchema}]});
+
+// const normalizedMockData = normalize(chatsMock, chatsSchema)
+// const denormalizedMockData = denormalize(normalizedMockData.result, chatsSchema, normalizedMockData.entities)
+
+// console.log(
+//     util.inspect( normalizedMockData, false, 10, true ) 
+//     // JSON.parse(util.inspect( normalizedMockData, false, 10, true ) )
+// )
+
+// console.log("normal length", JSON.stringify(chatsMock).length)
+// console.log("normalized length", JSON.stringify(normalizedMockData).length)
+// console.log("denormalized length", JSON.stringify(denormalizedMockData).length)
+// console.log("porcentaje de reduccion:", (JSON.stringify(normalizedMockData).length/JSON.stringify(mockData).length)*100,"%")
+
+// data = {
+//     "id": "mensajes",
+//     "chats": []
+// }
 
 io.on('connection', async (socket)=>{
     console.log(`Cliente conectado, id: ${socket.id}`)
 
     // chat
-    socket.emit("new_msg", await chatsDAO.read());
+    socket.emit("new_msg", normalize({id: 'chats', mensajes: await chatsDAO.read() }, chatsSchema));
     socket.on("new_msg", async (data) => {
         try{
             const currDate = new Date()
             data.date= `${currDate.toLocaleString()}`
             await chatsDAO.create(data)
-            const mensajes = await chatsDAO.read()
-            io.sockets.emit("new_msg", mensajes);
+            const mensajesNormalizados = normalize({id: 'chats', mensajes: await chatsDAO.read() }, chatsSchema)
+            console.log("mensajesNormalizados: ", util.inspect(mensajesNormalizados, false, 10, true ))
+            io.sockets.emit("new_msg", mensajesNormalizados);
         } catch(err) {
             console.log(err)
         }
