@@ -38,9 +38,9 @@ function enviarMensaje() {
 
 socket.on("new_msg", (dataNormalizada) => {
     //denormalizacion de la data
-    console.log("esto recibe el front: ",dataNormalizada)
+    // console.log("esto recibe el front: ",dataNormalizada)
     const data = normalizr.denormalize(dataNormalizada.result, chatsSchema, dataNormalizada.entities).mensajes
-    console.log("esto intenta renderizar el front", normalizr.denormalize(dataNormalizada.result, chatsSchema, dataNormalizada.entities))
+    // console.log("esto intenta renderizar el front", normalizr.denormalize(dataNormalizada.result, chatsSchema, dataNormalizada.entities))
     console.log("porcentaje de reduccion de datos: ", (JSON.stringify(dataNormalizada).length/JSON.stringify(normalizr.denormalize(dataNormalizada.result, chatsSchema, dataNormalizada.entities)).length)*100,"%")
     renderChat(data);
 })
