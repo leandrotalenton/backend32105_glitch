@@ -11,15 +11,33 @@ import { Server } from 'socket.io';
 const HttpServer = new HTTPServer(app)
 const io = new Server(HttpServer)
 
-// fileSystem
-// import fs from "fs"
-
 // DB
 import { Container } from './dbConnection/container.js';
 import mySqlConfig from './dbConnection/mySqlConfig.js';
 import sqliteConfig from './dbConnection/sqliteConfig.js';
 const DbProductos = new Container(mySqlConfig, 'products')
 const DbMensajes = new Container(sqliteConfig, 'messages')
+
+// esto se agrega para guardar usuarios como se vio en el after del 10/11/2022
+import DAOUsuarios from "./daos/usuarios/UsuariosDAO.js";
+const MongoUsers = new DAOUsuarios();
+
+
+// esto se agrega para utilizar sessions con mongoAtlas
+import session from 'express-session';
+import MongoStore from 'connect-mongo';
+const mongoOptions = { useNewUrlParser: true, useUnifiedTopology: true };
+
+app.use(session({
+    secret: "secret123123",
+    store: MongoStore.create({
+        mongoUrl: "mongodb+srv://LeandroCoder:Coder123123@clusterleandrocoder.fyskstk.mongodb.net/test",
+        mongoOptions,
+        
+    }),
+    resave: false,
+    saveUninitialized: false
+}))
 
 
 // static files
@@ -36,7 +54,57 @@ import { router } from "./routers/productos.js"
 app.use("/api/productos", router)
 
 app.get("/", async (req, res)=>{
-    res.render(`./index`, {arrProductos: await DbProductos.getAll()})
+    if(req.session.usuario){
+        res.render(`./index`, {arrProductos: await DbProductos.getAll(), nombre: req.session.usuario})
+    } else {
+        if(req.query.error){
+            res.status(404).send("error")
+        } else {
+            res.render('./login' )
+        }
+    }
+})
+
+//registerPOST
+app.post("/register", async(req, res) => {
+    try{
+        const { username, password } = req.body;
+        await MongoUsers.create({username, password});
+        req.session.rank = 0
+        req.session.usuario = username
+        res.redirect("/")
+    } catch(e) {
+        res.redirect("/?error=true")
+    }
+})
+
+//loginPOST
+app.post("/", async(req, res) => {
+    try{
+        const { username, password } = req.body;
+        const usuario = await MongoUsers.readByUsernameAndPassword(username, password); // cheackear como es y alterar el DAO
+        console.log(usuario)
+        req.session.rank = usuario.rank
+        req.session.usuario = username
+        res.redirect("/")
+    } catch(e) {
+        res.redirect("/?error=true")
+    }
+})
+
+
+//signUp
+app.get("/signup", (req,res)=>{
+    req.session.destroy()
+    res.render("./signUp")
+})
+
+//logout
+app.get("/logout", (req, res)=>{
+    let nombrex = req.session.usuario
+    req.session.destroy((err)=>{
+        res.render("./logout", { nombre: nombrex })
+    })
 })
 
 // list of products with faker
@@ -86,7 +154,7 @@ io.on('connection', async (socket)=>{
             data.date= `${currDate.toLocaleString()}`
             await chatsDAO.create(data)
             const mensajesNormalizados = normalize({id: 'chats', mensajes: await chatsDAO.read() }, chatsSchema)
-            console.log("mensajesNormalizados: ", util.inspect(mensajesNormalizados, false, 10, true ))
+            // console.log("mensajesNormalizados: ", util.inspect(mensajesNormalizados, false, 10, true ))
             io.sockets.emit("new_msg", mensajesNormalizados);
         } catch(err) {
             console.log(err)
