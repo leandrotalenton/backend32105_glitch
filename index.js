@@ -24,19 +24,20 @@ const MongoUsers = new DAOUsuarios();
 
 
 // esto se agrega para utilizar sessions con mongoAtlas
-import session from 'express-session';
+import session, { Cookie } from 'express-session';
 import MongoStore from 'connect-mongo';
 const mongoOptions = { useNewUrlParser: true, useUnifiedTopology: true };
 
 app.use(session({
     secret: "secret123123",
     store: MongoStore.create({
-        mongoUrl: "mongodb+srv://LeandroCoder:Coder123123@clusterleandrocoder.fyskstk.mongodb.net/test",
+        mongoUrl: "mongodb+srv://LeandroCoder:Coder123123@clusterleandrocoder.fyskstk.mongodb.net/leandroCoderDb",
         mongoOptions,
         
     }),
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie: { maxAge: 600000 } // 10min
 }))
 
 
@@ -53,19 +54,32 @@ app.set("view engine","ejs")
 import { router } from "./routers/productos.js"
 app.use("/api/productos", router)
 
+//routes
 app.get("/", async (req, res)=>{
     if(req.session.usuario){
         res.render(`./index`, {arrProductos: await DbProductos.getAll(), nombre: req.session.usuario})
     } else {
         if(req.query.error){
-            res.status(404).send("error")
+            res.status(404).render('./login', {error: req.query.error} )
         } else {
-            res.render('./login' )
+            res.render('./login', {error: req.query.error} )
         }
     }
 })
 
-//registerPOST
+app.get("/signup", (req,res)=>{
+    req.session.destroy()
+    res.render("./signUp")
+})
+
+app.get("/logout", (req, res)=>{
+    let nombre = req.session.usuario
+    req.session.destroy((err)=>{
+        res.render("./logout", { nombre })
+    })
+})
+
+//signUp POST
 app.post("/register", async(req, res) => {
     try{
         const { username, password } = req.body;
@@ -78,7 +92,7 @@ app.post("/register", async(req, res) => {
     }
 })
 
-//loginPOST
+//login POST
 app.post("/", async(req, res) => {
     try{
         const { username, password } = req.body;
@@ -93,31 +107,17 @@ app.post("/", async(req, res) => {
 })
 
 
-//signUp
-app.get("/signup", (req,res)=>{
-    req.session.destroy()
-    res.render("./signUp")
-})
-
-//logout
-app.get("/logout", (req, res)=>{
-    let nombrex = req.session.usuario
-    req.session.destroy((err)=>{
-        res.render("./logout", { nombre: nombrex })
-    })
-})
-
 // list of products with faker
-import { faker } from '@faker-js/faker'
-faker.locale = ('es')
+// import { faker } from '@faker-js/faker'
+// faker.locale = ('es')
 
-const genFakeProduct = ()=>{
-    return {
-        title: faker.commerce.productName(),
-        price: faker.commerce.price(100, 200, 2),
-        thumbnail: faker.image.food(75, 75, true)
-    }
-}
+// const genFakeProduct = ()=>{
+//     return {
+//         title: faker.commerce.productName(),
+//         price: faker.commerce.price(100, 200, 2),
+//         thumbnail: faker.image.food(75, 75, true)
+//     }
+// }
 
 app.get("/api/productos-test", async (req,res)=>{
     try{
