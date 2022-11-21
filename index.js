@@ -40,6 +40,55 @@ app.use(session({
     cookie: { maxAge: 600000 } // 10min
 }))
 
+// se agregan las cosas para trabajar con passport-local y encriptador de contrasenias
+import passport from 'passport';
+import { Strategy as LocalStrategy } from 'passport-local';
+
+import bcrypt from "bcrypt"
+const hashPassword = (pass) => {
+    return bcrypt.hashSync(pass, bcrypt.genSaltSync(10), null)
+}
+const validatePassword = (pass, hashedPassword) => {
+    return bcrypt.compareSync(pass, hashedPassword)
+}
+
+
+
+passport.use(
+    "signUp",
+    new LocalStrategy({}, async (username, password, done) => {
+            const existantUser = await MongoUsers.readByUsername(username)
+            if(existantUser) { return done(null, false) }
+
+            await MongoUsers.create({username, password: hashPassword(password)}) // <-- hashear esta password despues
+            const user = await MongoUsers.readByUsername(username)
+            return done (null, user)
+    })
+)
+
+passport.use(
+    "logIn",
+    new LocalStrategy({}, async (username, password, done) => {
+            const user = await MongoUsers.readByUsername(username)
+            if (!user || !validatePassword(password, user.password)) { return done(null, false) } // <-- cambiar por el validador de pass
+            return done(null, user)
+    })
+)
+
+passport.serializeUser((userObj, done) => {
+    console.log("se ejecuta el serializeUser con esta info: ", userObj)
+    done(null, userObj._id)
+})
+
+passport.deserializeUser( async(id, done)=>{
+    console.log("se ejecuta el deserializeUser con esta info: ", id)
+    const user = await MongoUsers.readById(id)
+    console.log("esto me trae el deserializer: ", user)
+    done(null, user)
+})
+
+app.use(passport.initialize())
+app.use(passport.session())
 
 // static files
 import path from 'path'
@@ -55,16 +104,13 @@ import { router } from "./routers/productos.js"
 app.use("/api/productos", router)
 
 //routes
-app.get("/", async (req, res)=>{
-    if(req.session.usuario){
-        res.render(`./index`, {arrProductos: await DbProductos.getAll(), nombre: req.session.usuario})
-    } else {
-        if(req.query.error){
-            res.status(404).render('./login', {error: req.query.error} )
-        } else {
-            res.render('./login', {error: req.query.error} )
-        }
-    }
+
+const authMw = (req, res, next) => {
+    req.isAuthenticated() ? next() : res.render('./login', {error: req.query.error} )
+}
+
+app.get("/", authMw ,async (req, res)=>{
+    res.render(`./index`, {arrProductos: await DbProductos.getAll(), nombre: req.user.username})
 })
 
 app.get("/signup", (req,res)=>{
@@ -73,64 +119,30 @@ app.get("/signup", (req,res)=>{
 })
 
 app.get("/logout", (req, res)=>{
-    let nombre = req.session.usuario
-    req.session.destroy((err)=>{
+    let nombre = req.user.username
+    req.logOut({},(err)=>{
+        if (err) { return next(err); }
         res.render("./logout", { nombre })
     })
 })
 
 //signUp POST
-app.post("/register", async(req, res) => {
-    try{
-        const { username, password } = req.body;
-        await MongoUsers.create({username, password});
-        req.session.rank = 0
-        req.session.usuario = username
+app.post(
+    "/register",
+    passport.authenticate("signUp", {failureRedirect: "/?error=true"}),
+    async(req, res) => {
         res.redirect("/")
-    } catch(e) {
-        res.redirect("/?error=true")
     }
-})
+)
 
 //login POST
-app.post("/", async(req, res) => {
-    try{
-        const { username, password } = req.body;
-        const usuario = await MongoUsers.readByUsernameAndPassword(username, password); // cheackear como es y alterar el DAO
-        console.log(usuario)
-        req.session.rank = usuario.rank
-        req.session.usuario = username
+app.post(
+    "/",
+    passport.authenticate("logIn", {failureRedirect: "/?error=true"}),
+    async(req, res) => {
         res.redirect("/")
-    } catch(e) {
-        res.redirect("/?error=true")
     }
-})
-
-
-// list of products with faker
-// import { faker } from '@faker-js/faker'
-// faker.locale = ('es')
-
-// const genFakeProduct = ()=>{
-//     return {
-//         title: faker.commerce.productName(),
-//         price: faker.commerce.price(100, 200, 2),
-//         thumbnail: faker.image.food(75, 75, true)
-//     }
-// }
-
-app.get("/api/productos-test", async (req,res)=>{
-    try{
-        const arrProductos = []
-        for(let i = 0 ; i < 5 ; i++){
-            arrProductos.push(genFakeProduct())
-        }
-        res.render(`./partials/productosIndependientes`,{arrProductos})
-    } catch(err) {
-        res.status(404).send(err)
-    }
-})
-// end of list of products with faker
+)
 
 // DAOs
 import daos from "./daos/index.js"

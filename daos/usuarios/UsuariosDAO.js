@@ -10,15 +10,25 @@ class DAOUsuarios extends ContainerMongoDb {
   }
   async readByUsernameAndPassword(username, password) {
     try {
-        const document = await this.db.findOne({$and: [
-          {username: username},
-          {password: password}
-        ]})
-        if (document) {
-            return document
-        }
+      const document = await this.db.findOne({$and: [
+        {username: username},
+        {password: password}
+      ]})
+      if (document) {
+        return document
+      }
     } catch (e) {
-        console.log(e)
+      console.log(e)
+    }
+  }
+  async readByUsername(username) {
+    try {
+      const document = await this.db.findOne({username: username})
+      if (document) {
+        return document
+      }
+    } catch (e) {
+      console.log(e)
     }
   }
 }
