@@ -28,12 +28,15 @@ import session, { Cookie } from 'express-session';
 import MongoStore from 'connect-mongo';
 const mongoOptions = { useNewUrlParser: true, useUnifiedTopology: true };
 
+import * as dotenv from "dotenv";
+dotenv.config();
+
 app.use(session({
     secret: "secret123123",
     store: MongoStore.create({
-        mongoUrl: "mongodb+srv://LeandroCoder:Coder123123@clusterleandrocoder.fyskstk.mongodb.net/leandroCoderDb",
+        mongoUrl: `mongodb+srv://${process.env.DB_SESSION_USER}:${process.env.DB_SESSION_PASS}@cluster${process.env.DB_SESSION_CLUSTERNAME}.fyskstk.mongodb.net/${process.env.DB_SESSION_NAME}`,
+        // mongoUrl: "mongodb+srv://LeandroCoder:Coder123123@clusterleandrocoder.fyskstk.mongodb.net/leandroCoderDb",
         mongoOptions,
-        
     }),
     resave: false,
     saveUninitialized: false,
@@ -60,7 +63,7 @@ passport.use(
             const existantUser = await MongoUsers.readByUsername(username)
             if(existantUser) { return done(null, false) }
 
-            await MongoUsers.create({username, password: hashPassword(password)}) // <-- hashear esta password despues
+            await MongoUsers.create({username, password: hashPassword(password)})
             const user = await MongoUsers.readByUsername(username)
             return done (null, user)
     })
@@ -70,7 +73,7 @@ passport.use(
     "logIn",
     new LocalStrategy({}, async (username, password, done) => {
             const user = await MongoUsers.readByUsername(username)
-            if (!user || !validatePassword(password, user.password)) { return done(null, false) } // <-- cambiar por el validador de pass
+            if (!user || !validatePassword(password, user.password)) { return done(null, false) }
             return done(null, user)
     })
 )
@@ -100,17 +103,23 @@ app.set("views","./views")
 app.set("view engine","ejs")
 
 // routers
-import { router } from "./routers/productos.js"
-app.use("/api/productos", router)
+import { router as productosRouter } from "./routers/productos.js"
+import { router as infoRouter } from "./routers/info.js"
+import { router as APIRandoms } from "./routers/randoms.js"
+app.use("/api/productos", productosRouter)
+app.use("/info", infoRouter)
+app.use("/api/randoms", APIRandoms)
 
 //routes
-
 const authMw = (req, res, next) => {
     req.isAuthenticated() ? next() : res.render('./login', {error: req.query.error} )
 }
 
 app.get("/", authMw ,async (req, res)=>{
-    res.render(`./index`, {arrProductos: await DbProductos.getAll(), nombre: req.user.username})
+    res.render(`./index`, {
+        arrProductos: await DbProductos.getAll(),
+        nombre: req.user.username
+    })
 })
 
 app.get("/signup", (req,res)=>{
@@ -186,8 +195,20 @@ io.on('connection', async (socket)=>{
     });
 })
 
+import Yargs from "yargs/yargs"
+const yargs = Yargs(process.argv.slice(2))
+const result = yargs
+    .alias({
+        p: "port"
+    })
+    .default({
+        port: 8080
+    })
+    .argv
+
+const { port } = result
 
 // server listen
-HttpServer.listen(8080, ()=>{
+HttpServer.listen(port, ()=>{
     console.log(`servidor iniciado`)
 })
