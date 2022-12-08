@@ -10,7 +10,7 @@
 <body>
     <h2>Sign Up:</h2>
     <div>
-        <form action="http://localhost:8080/register" method="POST">
+        <form action="<% `http://localhost:${port}/signup` %>" method="POST">
             <div>
                 <label for="login__username"><span>Username</span></label>
                 <input id="login__username" type="text" name="username" placeholder="Username" required>

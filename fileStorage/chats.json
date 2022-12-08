@@ -1,15 +1,1 @@
-[
-    {
-        "autor": {
-            "id": "juancarlos@hotmail.com",
-            "nombre": "juan",
-            "apellido": "carlos",
-            "edad": "87",
-            "alias": "donJuancarlos",
-            "avatar": "avatar"
-        },
-        "msj": "precio?",
-        "date": "11/14/2022, 3:28:05 PM",
-        "id": 1
-    }
-]
+[{"autor":{"id":"juancarlos@hotmail.com","nombre":"juan","apellido":"carlos","edad":"87","alias":"donJuancarlos","avatar":"avatar"},"msj":"precio?","date":"11/14/2022, 3:28:05 PM","id":1},{"autor":{"id":"asdasd","nombre":"asdasd","apellido":"asdasd","edad":"123","alias":"asdasd","avatar":"asdasd"},"msj":"asdasd","date":"12/8/2022, 2:52:46 PM","id":2},{"autor":{"id":"asdasd","nombre":"asdasd","apellido":"asdasd","edad":"123","alias":"asdasd","avatar":"asdasd"},"msj":"hola","date":"12/8/2022, 2:53:38 PM","id":3}]

@@ -18,10 +18,31 @@ import sqliteConfig from './dbConnection/sqliteConfig.js';
 const DbProductos = new Container(mySqlConfig, 'products')
 const DbMensajes = new Container(sqliteConfig, 'messages')
 
+import Yargs from "yargs/yargs"
+const yargs = Yargs(process.argv.slice(2))
+const result = yargs
+    .alias({
+        p: "port"
+    })
+    .default({
+        port: 8080
+    })
+    .argv
+
+const { port } = result
+
+// static files
+import path from 'path'
+const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, 'public')));
+
+// template engines
+app.set("views","./views")
+app.set("view engine","ejs")
+
 // esto se agrega para guardar usuarios como se vio en el after del 10/11/2022
 import DAOUsuarios from "./daos/usuarios/UsuariosDAO.js";
 const MongoUsers = new DAOUsuarios();
-
 
 // esto se agrega para utilizar sessions con mongoAtlas
 import session, { Cookie } from 'express-session';
@@ -55,26 +76,24 @@ const validatePassword = (pass, hashedPassword) => {
     return bcrypt.compareSync(pass, hashedPassword)
 }
 
-
-
 passport.use(
     "signUp",
     new LocalStrategy({}, async (username, password, done) => {
-            const existantUser = await MongoUsers.readByUsername(username)
-            if(existantUser) { return done(null, false) }
+        const existantUser = await MongoUsers.readByUsername(username)
+        if(existantUser) { return done(null, false) }
 
-            await MongoUsers.create({username, password: hashPassword(password)})
-            const user = await MongoUsers.readByUsername(username)
-            return done (null, user)
+        await MongoUsers.create({username, password: hashPassword(password)})
+        const user = await MongoUsers.readByUsername(username)
+        return done (null, user)
     })
 )
 
 passport.use(
     "logIn",
     new LocalStrategy({}, async (username, password, done) => {
-            const user = await MongoUsers.readByUsername(username)
-            if (!user || !validatePassword(password, user.password)) { return done(null, false) }
-            return done(null, user)
+        const user = await MongoUsers.readByUsername(username)
+        if (!user || !validatePassword(password, user.password)) { return done(null, false) }
+        return done(null, user)
     })
 )
 
@@ -83,24 +102,15 @@ passport.serializeUser((userObj, done) => {
     done(null, userObj._id)
 })
 
-passport.deserializeUser( async(id, done)=>{
-    console.log("se ejecuta el deserializeUser con esta info: ", id)
-    const user = await MongoUsers.readById(id)
+passport.deserializeUser( async(someId, done)=>{
+    console.log("se ejecuta el deserializeUser con esta info: ", someId)
+    const user = await MongoUsers.readById(someId)
     console.log("esto me trae el deserializer: ", user)
     done(null, user)
 })
 
 app.use(passport.initialize())
 app.use(passport.session())
-
-// static files
-import path from 'path'
-const __dirname = path.resolve();
-app.use(express.static(path.join(__dirname, 'public')));
-
-// template engines
-app.set("views","./views")
-app.set("view engine","ejs")
 
 // routers
 import { router as productosRouter } from "./routers/productos.js"
@@ -112,7 +122,7 @@ app.use("/api/randoms", APIRandoms)
 
 //routes
 const authMw = (req, res, next) => {
-    req.isAuthenticated() ? next() : res.render('./login', {error: req.query.error} )
+    req.isAuthenticated() ? next() : res.render('./login', { error: req.query.error, port } )
 }
 
 app.get("/", authMw ,async (req, res)=>{
@@ -124,20 +134,20 @@ app.get("/", authMw ,async (req, res)=>{
 
 app.get("/signup", (req,res)=>{
     req.session.destroy()
-    res.render("./signUp")
+    res.render("./signUp", { port })
 })
 
 app.get("/logout", (req, res)=>{
     let nombre = req.user.username
     req.logOut({},(err)=>{
         if (err) { return next(err); }
-        res.render("./logout", { nombre })
+        res.render("./logout", { nombre, port })
     })
 })
 
 //signUp POST
 app.post(
-    "/register",
+    "/signup",
     passport.authenticate("signUp", {failureRedirect: "/?error=true"}),
     async(req, res) => {
         res.redirect("/")
@@ -195,18 +205,6 @@ io.on('connection', async (socket)=>{
     });
 })
 
-import Yargs from "yargs/yargs"
-const yargs = Yargs(process.argv.slice(2))
-const result = yargs
-    .alias({
-        p: "port"
-    })
-    .default({
-        port: 8080
-    })
-    .argv
-
-const { port } = result
 
 // server listen
 HttpServer.listen(port, ()=>{
