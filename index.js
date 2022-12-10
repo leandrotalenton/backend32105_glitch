@@ -22,14 +22,16 @@ import Yargs from "yargs/yargs"
 const yargs = Yargs(process.argv.slice(2))
 const result = yargs
     .alias({
-        p: "port"
+        p: "port",
+        m: "method"
     })
     .default({
-        port: 8080
+        port: 8080,
+        method: "FORK"
     })
     .argv
 
-const { port } = result
+const { port, method } = result
 
 // static files
 import path from 'path'
@@ -205,8 +207,27 @@ io.on('connection', async (socket)=>{
     });
 })
 
+import cluster from 'cluster';
 
 // server listen
-HttpServer.listen(port, ()=>{
-    console.log(`servidor iniciado`)
-})
+if(method == "CLUSTER"){
+    if (cluster.isPrimary) {
+        console.log(`Cluster Primary ${process.pid} corriendo`);
+        for (let i = 0; i < 3; i+=1) {
+            cluster.fork();
+        }
+        cluster.on('exit', (worker) => {
+            console.log(`Worker ${worker.process.pid} se ha caido`);
+        })
+    } else {
+        //worker
+        HttpServer.listen(port, () => {
+            console.log(`servidor iniciado en el puerto ${port} con el metodo ${method}, en el worker ${process.pid}`)
+        });
+    }
+} else {
+    HttpServer.listen(port, ()=>{
+        console.log(`servidor iniciado en el puerto ${port} con el metodo ${method}`)
+    })
+}
+

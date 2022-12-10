@@ -1,6 +1,9 @@
-import express from 'express'
+import express from 'express';
+import { cpus } from "os";
 const {Router} = express;
 const router = Router()
+
+const cpu = cpus()
 
 router.get("/", async (req,res)=>{
     try{
@@ -11,7 +14,8 @@ router.get("/", async (req,res)=>{
             memoriaTotalReservada: process.memoryUsage(),
             pathDeEjecucion: process.execPath,
             processId: process.pid,
-            carpetaDelProyecto: process.cwd()
+            carpetaDelProyecto: process.cwd(),
+            cantidadDeProcesadores: cpu.length
         })
     } catch(err) {
         res.status(404).send(err)
