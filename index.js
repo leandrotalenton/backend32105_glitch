@@ -14,22 +14,32 @@ const io = new Server(HttpServer)
 // DB
 import { Container } from './dbConnection/container.js';
 import mySqlConfig from './dbConnection/mySqlConfig.js';
-import sqliteConfig from './dbConnection/sqliteConfig.js';
+// import sqliteConfig from './dbConnection/sqliteConfig.js';
 const DbProductos = new Container(mySqlConfig, 'products')
-const DbMensajes = new Container(sqliteConfig, 'messages')
+// const DbMensajes = new Container(sqliteConfig, 'messages')
+
+// logger
+import logger from "./loggers/configLog4JS.js";
+
+app.use((req, res, next) => {
+    logger.info(`Request con metodo: ${req.method}, a la URL: ${req.url}`)
+    next();
+});
 
 import Yargs from "yargs/yargs"
 const yargs = Yargs(process.argv.slice(2))
 const result = yargs
     .alias({
-        p: "port"
+        p: "port",
+        m: "method"
     })
     .default({
-        port: 8080
+        port: 8080,
+        method: "FORK"
     })
     .argv
 
-const { port } = result
+const { port, method } = result
 
 // static files
 import path from 'path'
@@ -205,8 +215,33 @@ io.on('connection', async (socket)=>{
     });
 })
 
+app.all("*", (req, res, next) => {
+    logger.warn(`request fallida: ${req.method}, a la URL: ${req.url}`);
+    res.send({ error:true }).status(500);
+    next();
+})
+
+import cluster from 'cluster';
 
 // server listen
-HttpServer.listen(port, ()=>{
-    console.log(`servidor iniciado`)
-})
+if(method == "CLUSTER"){
+    if (cluster.isPrimary) {
+        console.log(`Cluster Primary ${process.pid} corriendo`);
+        for (let i = 0; i < 3; i+=1) {
+            cluster.fork();
+        }
+        cluster.on('exit', (worker) => {
+            console.log(`Worker ${worker.process.pid} se ha caido`);
+        })
+    } else {
+        //worker
+        HttpServer.listen(port, () => {
+            console.log(`servidor iniciado en el puerto ${port} con el metodo ${method}, en el worker ${process.pid}`)
+        });
+    }
+} else {
+    HttpServer.listen(port, ()=>{
+        console.log(`servidor iniciado en el puerto ${port} con el metodo ${method}`)
+    })
+}
+

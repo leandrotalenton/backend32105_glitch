@@ -1,4 +1,5 @@
 import fs from "fs";
+import logger from "../loggers/configLog4JS.js";
 
 class ContainerFs {
     constructor(file) {
@@ -15,7 +16,7 @@ class ContainerFs {
             const newItems = JSON.stringify(items)
             await fs.promises.writeFile(this.file, newItems)
         } catch (e) {
-            console.log(e)
+            logger.error(`Api de mensajes: ${e}`)
         }
     }
 
@@ -25,7 +26,7 @@ class ContainerFs {
             const items = JSON.parse(currentItems);
             return items
         } catch (e) {
-            console.log(e)
+            logger.error(`Api de mensajes: ${e}`)
         }
     }
 
@@ -39,7 +40,7 @@ class ContainerFs {
                 return item
             }
         } catch (e) {
-            console.log(e)
+            logger.error(`Api de mensajes: ${e}`)
         }
     }
 
@@ -60,7 +61,7 @@ class ContainerFs {
                 return `no se encuentra un item con el ID especificado`
             }
         } catch (e) {
-            console.log(e)
+            logger.error(`Api de mensajes: ${e}`)
         }
     }
 
@@ -79,7 +80,7 @@ class ContainerFs {
                 return `no se encuentra un item con el ID especificado`
             }
         } catch (e) {
-            console.log(e)
+            logger.error(`Api de mensajes: ${e}`)
         }
     }
 
@@ -89,7 +90,7 @@ class ContainerFs {
             const newItems = JSON.stringify(items)
             await fs.promises.writeFile(this.file, newItems)
         } catch (e) {
-            console.log(e)
+            logger.error(`Api de mensajes: ${e}`)
         }
     }
 }
