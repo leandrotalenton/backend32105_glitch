@@ -1,3 +1,5 @@
+import logger from "../loggers/configLog4JS.js";
+
 class ContainerMemory {
     constructor() {
         this.memoryArray = [];
@@ -9,7 +11,7 @@ class ContainerMemory {
             newItem.id = id
             this.memoryArray.push(newItem)
         } catch (e) {
-            console.log(e)
+            logger.error(`Api de mensajes: ${e}`)
         }
     }
 
@@ -17,7 +19,7 @@ class ContainerMemory {
         try {
             return this.memoryArray
         } catch (e) {
-            console.log(e)
+            logger.error(`Api de mensajes: ${e}`)
         }
     }
 
@@ -29,7 +31,7 @@ class ContainerMemory {
                 return item
             }
         } catch (e) {
-            console.log(e)
+            logger.error(`Api de mensajes: ${e}`)
         }
     }
 
@@ -46,7 +48,7 @@ class ContainerMemory {
                 return `no se encuentra un item con el ID especificado`
             }
         } catch (e) {
-            console.log(e)
+            logger.error(`Api de mensajes: ${e}`)
         }
     }
 
@@ -61,7 +63,7 @@ class ContainerMemory {
                 return `no se encuentra un item con el ID especificado`
             }
         } catch (e) {
-            console.log(e)
+            logger.error(`Api de mensajes: ${e}`)
         }
     }
 
@@ -69,7 +71,7 @@ class ContainerMemory {
         try {
             this.memoryArray = [];
         } catch (e) {
-            console.log(e)
+            logger.error(`Api de mensajes: ${e}`)
         }
     }
 }

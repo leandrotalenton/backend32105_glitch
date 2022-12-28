@@ -14,9 +14,17 @@ const io = new Server(HttpServer)
 // DB
 import { Container } from './dbConnection/container.js';
 import mySqlConfig from './dbConnection/mySqlConfig.js';
-import sqliteConfig from './dbConnection/sqliteConfig.js';
+// import sqliteConfig from './dbConnection/sqliteConfig.js';
 const DbProductos = new Container(mySqlConfig, 'products')
-const DbMensajes = new Container(sqliteConfig, 'messages')
+// const DbMensajes = new Container(sqliteConfig, 'messages')
+
+// logger
+import logger from "./loggers/configLog4JS.js";
+
+app.use((req, res, next) => {
+    logger.info(`Request con metodo: ${req.method}, a la URL: ${req.url}`)
+    next();
+});
 
 import Yargs from "yargs/yargs"
 const yargs = Yargs(process.argv.slice(2))
@@ -205,6 +213,12 @@ io.on('connection', async (socket)=>{
             console.log(err)
         }
     });
+})
+
+app.all("*", (req, res, next) => {
+    logger.warn(`request fallida: ${req.method}, a la URL: ${req.url}`);
+    res.send({ error:true }).status(500);
+    next();
 })
 
 import cluster from 'cluster';
