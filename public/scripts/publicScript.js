@@ -8,13 +8,15 @@ const autoresSchema = new normalizr.schema.Entity("autores");
 const chatsSchema = new normalizr.schema.Entity("chats", {mensajes:[{autor:autoresSchema}]});
 
 function renderChat(data) {
-    const chatHTML = data.map((msg) => `
-        <li>
-            <div>
-                <span>${msg.autor.id} on [${msg.date}]: ${msg.msj}</span>
-            </div>
-        </li>
-    `).join(" ");
+    const chatHTML = data.map((msg) => {
+        return `
+            <li>
+                <div>
+                    <span>${msg._doc.autor.alias} on [${msg._doc.date}]: ${msg._doc.msj}</span>
+                </div>
+            </li>
+        `
+    }).join(" ");
 
     document.querySelector(`.chatContainer>ul`).innerHTML = chatHTML;
 }
@@ -48,13 +50,16 @@ socket.on("new_msg", (dataNormalizada) => {
 // productos ////////////////////////////////////////////////////////////////
 
 function renderProductos(data) {
-    const productosHTML = data.map((producto) => `
-        <tr>
-            <td>${producto.title}</td>
-            <td>${producto.price}</td>
-            <td><img src=${producto.thumbnail}></td>
-        </tr>
-    `).join(" ");
+    const productosHTML = data.map((producto) => {
+        return `
+            <tr>
+                <td>${producto.title}</td>
+                <td>${producto.price}</td>
+                <td><img src=${producto.thumbnail}></td>
+            </tr>
+        `
+    }
+    ).join(" ");
 
     document.querySelector(`#productos--tbody`).innerHTML = productosHTML;
 }

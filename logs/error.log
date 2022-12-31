@@ -1,0 +1,11 @@
+[2022-12-31T15:09:16.209] [ERROR] default - Api de mensajes: ValidationError: autor: Cast to string failed for value "{
+  id: 'test@test.test',
+  nombre: 'test',
+  apellido: 'test',
+  edad: '4',
+  alias: 'test',
+  avatar: 'test'
+}" (type Object) at path "autor"
+[2022-12-31T16:05:39.441] [ERROR] default - Api de mensajes: ValidationError: msj: Path `msj` is required.
+[2022-12-31T16:05:40.356] [ERROR] default - Api de mensajes: ValidationError: msj: Path `msj` is required.
+[2022-12-31T16:05:40.929] [ERROR] default - Api de mensajes: ValidationError: msj: Path `msj` is required.

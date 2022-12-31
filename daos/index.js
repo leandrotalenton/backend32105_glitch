@@ -13,6 +13,12 @@ const daos = {
         return {
             chatsDAO: new DAOChatsFs(),
         }
+    },
+    mongo: async () =>  {
+        const { default: DAOChatsMongo } = await import("./chats/ChatsDaoMongo.js")
+        return {
+            chatsDAO: new DAOChatsMongo(),
+        }
     }
 }
 

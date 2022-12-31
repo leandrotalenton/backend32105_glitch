@@ -2,15 +2,17 @@ import express from 'express'
 const {Router} = express;
 const router = Router()
 
-import { Container } from '../dbConnection/container.js';
-import mySqlConfig from '../dbConnection/mySqlConfig.js';
-const DbProductos = new Container(mySqlConfig, 'products')
+// import { Container } from '../dbConnection/container.js';
+// import mySqlConfig from '../dbConnection/mySqlConfig.js';
+// const DbProductos = new Container(mySqlConfig, 'products')
+
+import {DbProductos} from '../index.js'
 
 
 // devuelve todos los productos
 router.get("/", async (req,res)=>{
     try{
-        const arrProductos = await DbProductos.getAll()
+        const arrProductos = await DbProductos.read()
         res.render(`./partials/productos`,{arrProductos})
     } catch(err) {
         res.status(404).send(err)
@@ -21,7 +23,7 @@ router.get("/", async (req,res)=>{
 router.get("/:id", async (req,res)=>{
     try {
         const { id } = req.params
-        const producto = await DbProductos.getById(id)
+        const producto = await DbProductos.readById(id)
         res.send(producto)
     } catch(err) {
         res.status(404).send(err)

@@ -1,1 +1,64 @@
 [2022-12-26T23:10:40.465] [WARN] default - request fallida: GET, a la URL: /rutaQueNoExiste
+[2022-12-31T14:49:21.763] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T14:49:27.155] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T14:59:14.555] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:08:45.178] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:08:50.156] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:09:16.209] [ERROR] default - Api de mensajes: ValidationError: autor: Cast to string failed for value "{
+  id: 'test@test.test',
+  nombre: 'test',
+  apellido: 'test',
+  edad: '4',
+  alias: 'test',
+  avatar: 'test'
+}" (type Object) at path "autor"
+[2022-12-31T15:17:48.842] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:18:35.416] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:18:38.668] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:18:43.389] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:22:55.860] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:26:58.717] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:28:14.300] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:29:31.357] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:29:37.442] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:31:40.693] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:32:15.426] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:32:41.711] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:34:46.056] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:39:16.561] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:39:27.183] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:39:58.406] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:40:03.259] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:40:07.060] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:40:10.364] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:40:13.576] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:41:58.995] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:42:08.362] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:42:11.841] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:42:16.187] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:42:56.290] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:44:03.412] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:44:26.702] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:54:13.804] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:55:47.001] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:57:53.274] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:58:02.943] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:58:05.467] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:58:08.798] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:58:13.737] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:58:35.652] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:58:39.105] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:58:42.389] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T15:59:01.498] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T16:04:30.065] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T16:04:36.444] [WARN] default - request fallida: GET, a la URL: /productos
+[2022-12-31T16:04:37.309] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T16:05:17.050] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T16:05:39.441] [ERROR] default - Api de mensajes: ValidationError: msj: Path `msj` is required.
+[2022-12-31T16:05:40.356] [ERROR] default - Api de mensajes: ValidationError: msj: Path `msj` is required.
+[2022-12-31T16:05:40.929] [ERROR] default - Api de mensajes: ValidationError: msj: Path `msj` is required.
+[2022-12-31T16:09:44.750] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T16:09:50.335] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T16:10:57.502] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T16:11:50.381] [WARN] default - request fallida: GET, a la URL: /favicon.ico
+[2022-12-31T16:13:29.459] [WARN] default - request fallida: GET, a la URL: /favicon.ico

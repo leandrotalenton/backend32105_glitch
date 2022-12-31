@@ -12,11 +12,14 @@ const HttpServer = new HTTPServer(app)
 const io = new Server(HttpServer)
 
 // DB
-import { Container } from './dbConnection/container.js';
-import mySqlConfig from './dbConnection/mySqlConfig.js';
+// import { Container } from './dbConnection/container.js';
+// import mySqlConfig from './dbConnection/mySqlConfig.js';
 // import sqliteConfig from './dbConnection/sqliteConfig.js';
-const DbProductos = new Container(mySqlConfig, 'products')
+// const DbProductos = new Container(mySqlConfig, 'products') // <-- esto esta en SQL local ////////////////////////////////
 // const DbMensajes = new Container(sqliteConfig, 'messages')
+
+import DAOProductos from "./daos/productos/ProductosDaoMongo.js";
+export const DbProductos = new DAOProductos();
 
 // logger
 import logger from "./loggers/configLog4JS.js";
@@ -137,7 +140,7 @@ const authMw = (req, res, next) => {
 
 app.get("/", authMw ,async (req, res)=>{
     res.render(`./index`, {
-        arrProductos: await DbProductos.getAll(),
+        arrProductos: await DbProductos.read(),
         nombre: req.user.username
     })
 })
@@ -187,7 +190,7 @@ const chatsSchema = new schema.Entity("chats", {mensajes:[{autor:autoresSchema}]
 io.on('connection', async (socket)=>{
     console.log(`Cliente conectado, id: ${socket.id}`)
 
-    // chat
+    // chat <-- el deserializador seguramente se rompio con el cambio de DB, si tnego tiempo despues lo reviso
     socket.emit("new_msg", normalize({id: 'chats', mensajes: await chatsDAO.read() }, chatsSchema));
     socket.on("new_msg", async (data) => {
         try{
@@ -203,11 +206,11 @@ io.on('connection', async (socket)=>{
     });
 
     // prod
-    socket.emit("new_prod", await DbProductos.getAll());
+    socket.emit("new_prod", await DbProductos.read());
     socket.on("new_prod", async (data) => {
         try{
-            await DbProductos.save(data);
-            const productos = await DbProductos.getAll();
+            await DbProductos.create(data);
+            const productos = await DbProductos.read();
             io.sockets.emit('new_prod', productos);
         } catch(err) {
             console.log(err)
