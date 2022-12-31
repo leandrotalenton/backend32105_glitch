@@ -10,10 +10,8 @@
     <span> <%- `Hasta luego ${nombre}` %> </span>
 
     <script>
-        const port = "<%- port %>"
-        const link = `http://localhost:${port}`
         setTimeout(()=>{
-            window.location.href = link
+            document.location.href="/";
         }, 3000)
     </script>
 </body>

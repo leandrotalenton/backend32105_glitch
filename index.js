@@ -154,7 +154,7 @@ app.get("/logout", (req, res)=>{
     let nombre = req.user.username
     req.logOut({},(err)=>{
         if (err) { return next(err); }
-        res.render("./logout", { nombre, port })
+        res.render("./logout", { nombre })
     })
 })
 
